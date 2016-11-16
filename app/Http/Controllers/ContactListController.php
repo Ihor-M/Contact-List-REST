@@ -143,8 +143,6 @@ class ContactListController extends Controller
             ]);
         }
 
-        return response()->json([
-            'status' => 200
-        ]);
+        return $this->index();
     }
 }

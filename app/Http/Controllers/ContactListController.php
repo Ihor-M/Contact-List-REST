@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactListRequest;
 use App\Repositories\ContactListRepository;
+use Illuminate\Http\Request;
 
 class ContactListController extends Controller
 {
@@ -55,17 +56,33 @@ class ContactListController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ContactListRequest  $request
+     * @param  Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ContactListRequest $request)
+    public function store(Request $request)
     {
         try {
+            $rules = [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'phone_number' => 'required|unique:contacts_list,phone_number',
+                'email' => 'required|unique:contacts_list,email|email',
+                'birthday_date' => 'required|date',
+                'basic_info' => 'required'
+            ];
+            $validator = app('validator')->make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'code'      =>  422,
+                    'errors'    =>  $validator->errors()
+                ]);
+            }
+
             $date = date("Y-m-d", strtotime($request->birthday_date));
             $request['birthday_date'] = $date;
             $this->contactListRepository->create($request->all());
         } catch (\Exception $e) {
-            logger($e->getMessage());
             return response()->json([
                 'status' => $e->getCode(),
                 'error' => $e->getMessage()

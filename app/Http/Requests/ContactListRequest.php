@@ -13,7 +13,7 @@ class ContactListRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,12 +24,12 @@ class ContactListRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'birthday_date' => 'required|date',
-            'basic_info' => 'required'
+//            'first_name' => 'required',
+//            'last_name' => 'required',
+//            'phone_number' => 'required',
+//            'email' => 'required|email',
+//            'birthday_date' => 'required|date',
+//            'basic_info' => 'required'
         ];
     }
 }

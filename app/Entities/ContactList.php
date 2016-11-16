@@ -17,7 +17,7 @@ class ContactList extends Model
     protected $fillable = [
         'first_name',
         'last_name',
-        'phone',
+        'phone_number',
         'email',
         'birthday_date',
         'basic_info',

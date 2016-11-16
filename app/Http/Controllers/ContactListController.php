@@ -61,15 +61,20 @@ class ContactListController extends Controller
     public function store(ContactListRequest $request)
     {
         try {
+            $date = date("Y-m-d", strtotime($request->birthday_date));
+            $request['birthday_date'] = $date;
             $this->contactListRepository->create($request->all());
         } catch (\Exception $e) {
+            logger($e->getMessage());
             return response()->json([
                 'status' => $e->getCode(),
                 'error' => $e->getMessage()
             ]);
         }
 
-        return $this->index();
+        return response()->json([
+            'status' => 200
+        ]);
     }
 
     /**

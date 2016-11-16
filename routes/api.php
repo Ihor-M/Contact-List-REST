@@ -17,6 +17,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:api');
 
+
+
 Route::group(['middleware' => 'cors'], function () {
     Route::resource('contacts', 'ContactListController');
 });

@@ -130,13 +130,32 @@ class ContactListController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  ContactListRequest  $request
+     * @param  Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ContactListRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
+            $rules = [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'phone_number' => 'required',
+                'email' => 'required|email',
+                'birthday_date' => 'required|date',
+                'basic_info' => 'required'
+            ];
+            $validator = app('validator')->make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'code'      =>  422,
+                    'errors'    =>  $validator->errors()
+                ]);
+            }
+
+            $date = date("Y-m-d", strtotime($request->birthday_date));
+            $request['birthday_date'] = $date;
             $this->contactListRepository->update($id, $request->all());
         } catch (\Exception $e) {
             return response()->json([
